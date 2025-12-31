@@ -1,0 +1,27 @@
+# Dependencies
+node_modules
+
+# Development files
+.env.local
+.env*.local
+
+# Scripts (not needed for production)
+scripts
+
+# IDE
+.vscode
+.idea
+
+# Git
+.git
+.gitignore
+
+# Testing
+coverage
+*.test.ts
+*.test.tsx
+*.spec.ts
+*.spec.tsx
+
+# Documentation
+README.md
