@@ -7,7 +7,10 @@ import SidebarWrapper from "@/components/SidebarWrapper";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Probase Admin",
+  title: {
+    template: "%s | Probase Admin",
+    default: "Probase Admin",
+  },
   description: "Management dashboard for Probase Ecosystem",
 };
 
@@ -18,10 +21,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${inter.className} bg-white text-slate-900 min-h-screen flex`}>
+      <body className={`${inter.className} bg-slate-50 text-slate-900 min-h-screen flex`}>
         <AuthProvider>
           <SidebarWrapper />
-          <main className="flex-1 p-8 overflow-y-auto">
+          <main className="flex-1 p-8 overflow-y-auto no-scrollbar bg-indigo-50/30">
             {children}
           </main>
         </AuthProvider>

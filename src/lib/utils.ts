@@ -6,10 +6,9 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function formatCurrency(amount: number) {
-  return new Intl.NumberFormat("vi-VN", {
-    style: "currency",
-    currency: "VND",
-  }).format(amount);
+  return new Intl.NumberFormat("en-US", {
+    style: "decimal",
+  }).format(amount) + " đ";
 }
 
 export function formatDate(date: string | Date) {
