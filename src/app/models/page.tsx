@@ -68,19 +68,43 @@ export default function ModelsPage() {
     const handleSave = async () => {
         setSaving(true);
         try {
-            const { error } = await supabase
-                .from("model_providers")
-                .upsert(formData, { onConflict: "model_id" });
+            if (isEditOpen && selectedModel) {
+                // Update existing model
+                const { error } = await supabase
+                    .from("model_providers")
+                    .update({
+                        name: formData.name,
+                        pricing_unit: formData.pricing_unit,
+                        base_cost: formData.base_cost,
+                        rate_rmb_vnd: formData.rate_rmb_vnd,
+                        sell_economy: formData.sell_economy,
+                        sell_standard: formData.sell_standard,
+                        sell_advanced: formData.sell_advanced,
+                        sell_pro: formData.sell_pro,
+                        // If model_id is changed, we update it too. 
+                        // Note: This works if model_id is not the primary key or if we assume ID is stable.
+                        // Ideally we update based on unique 'id' not 'model_id'.
+                        model_id: formData.model_id
+                    })
+                    .eq("id", selectedModel.id);
 
-            if (error) throw error;
+                if (error) throw error;
+            } else {
+                // Create new model
+                const { error } = await supabase
+                    .from("model_providers")
+                    .insert([formData]);
+
+                if (error) throw error;
+            }
 
             await fetchModels();
             setIsAddOpen(false);
             setIsEditOpen(false);
             setSelectedModel(null);
-        } catch (error) {
+        } catch (error: any) {
             console.error("Error saving model:", error);
-            alert("Có lỗi xảy ra khi lưu model");
+            alert("Lỗi: " + error.message);
         } finally {
             setSaving(false);
         }

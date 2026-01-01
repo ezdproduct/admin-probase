@@ -128,7 +128,10 @@ export default function UsersPage() {
     };
 
     async function handleSubmit() {
-        if (!appParam) return;
+        if (!appParam) {
+            alert("Vui lòng chọn ứng dụng trước khi thực hiện thao tác này.");
+            return;
+        }
         setActionLoading(true);
         const tableName = `data_${appParam.replace(/-/g, '_')}`;
 
@@ -169,8 +172,12 @@ export default function UsersPage() {
     }
 
     async function handleDelete(id: string) {
+        if (!appParam) {
+            alert("Lỗi: Không xác định được ứng dụng.");
+            return;
+        }
         if (!confirm("Xác nhận xóa người dùng này?")) return;
-        const tableName = `data_${appParam?.replace(/-/g, '_')}`;
+        const tableName = `data_${appParam.replace(/-/g, '_')}`;
         const { error } = await supabase.from(tableName).delete().eq("id", id);
         if (!error) {
             fetchUsers(appParam!);
@@ -180,7 +187,10 @@ export default function UsersPage() {
     }
 
     async function handleAddFunds() {
-        if (!selectedUser || !appParam) return;
+        if (!selectedUser || !appParam) {
+            alert("Vui lòng chọn ứng dụng và người dùng.");
+            return;
+        }
         if (walletAmount <= 0) {
             alert("Vui lòng nhập số tiền hợp lệ");
             return;
@@ -323,7 +333,13 @@ export default function UsersPage() {
                             </TableRow>
                         </TableHeader>
                         <TableBody>
-                            {loading ? (
+                            {!appParam ? (
+                                <TableRow>
+                                    <TableCell colSpan={5} className="h-48 text-center text-slate-400 italic">
+                                        Vui lòng chọn một Ứng dụng để xem danh sách người dùng
+                                    </TableCell>
+                                </TableRow>
+                            ) : loading ? (
                                 <TableRow>
                                     <TableCell colSpan={5} className="h-48 text-center text-slate-400">
                                         Đang tải dữ liệu...
